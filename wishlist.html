@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whishlist</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gold: #d4af37;
+            --primary-dark: #0f1419;
+            --primary-green: #1a3b2e;
+            --primary-red: #8b1538;
+            --accent-light: #f8f9fa;
+            --accent-warm: #fef7ed;
+            --shadow-light: rgba(255, 255, 255, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.2);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a3b2e 35%, #2d1b3d 70%, #8b1538 100%);
+            min-height: 100vh;
+            color: var(--accent-light);
+            position: relative;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(26, 59, 46, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d4af37 0%, #f7e98e 25%, #d4af37 50%, #b8941f 75%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: rgba(248, 249, 250, 0.7);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            gap: 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 6px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 3rem;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 14px 24px;
+            background: transparent;
+            border: none;
+            border-radius: 12px;
+            color: rgba(248, 249, 250, 0.7);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            letter-spacing: 0.3px;
+        }
+
+        .tab-button:hover {
+            color: var(--accent-light);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-button.active {
+            background: var(--primary-gold);
+            color: var(--primary-dark);
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(30px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-gold);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            font-size: 1rem;
+            color: var(--accent-light);
+            font-weight: 400;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(248, 249, 250, 0.4);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .gifts-section {
+            margin-top: 2.5rem;
+        }
+
+        .gifts-section > label {
+            display: block;
+            color: var(--primary-gold);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .gifts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .gift-input {
+            position: relative;
+        }
+
+        .gift-input input {
+            padding-left: 50px;
+        }
+
+        .gift-input::before {
+            content: attr(data-number);
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-gold);
+            color: var(--primary-dark);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-gold) 0%, #f7e98e 100%);
+            border: none;
+            border-radius: 14px;
+            color: var(--primary-dark);
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+            letter-spacing: 0.3px;
+            font-family: inherit;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .children-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .child-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .child-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-gold), #f7e98e);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .child-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .child-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .child-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-light);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .gifts-count {
+            color: rgba(248, 249, 250, 0.6);
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 20, 25, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            backdrop-filter: blur(30px);
+            position: relative;
+            box-shadow: 
+                0 40px 80px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: modalSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalSlide {
+            from { 
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: rgba(248, 249, 250, 0.6);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--accent-light);
+            transform: rotate(90deg);
+        }
+
+        .modal h3 {
+            color: var(--primary-gold);
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: -0.01em;
+        }
+
+        .gifts-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .gifts-list li {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border-left: 3px solid var(--primary-gold);
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--accent-light);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .gifts-list li:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(4px);
+        }
+
+        .gifts-list li::before {
+            content: counter(gift-counter);
+            counter-increment: gift-counter;
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-gold);
+            color: var(--primary-dark);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .gifts-list {
+            counter-reset: gift-counter;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(16, 185, 129, 0.9));
+            color: white;
+            padding: 1.25rem 1.5rem;
+            border-radius: 16px;
+            margin-top: 2rem;
+            text-align: center;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: successSlide 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes successSlide {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: rgba(248, 249, 250, 0.5);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .form-row,
+            .gifts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-content {
+                padding: 2rem;
+            }
+
+            .modal {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .children-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .tabs {
+                max-width: none;
+                margin: 0 0 2rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Listes de Cadeaux</h1>
+            <p>Créez et consultez les souhaits de fin d'année</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('children')">
+                Enfants
+            </button>
+            <button class="tab-button" onclick="switchTab('parents')">
+                Parents
+            </button>
+        </div>
+
+        <div id="children-tab" class="tab-content active">
+            <form id="children-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first-name">Prénom</label>
+                        <input type="text" id="first-name" name="firstName" placeholder="Votre prénom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name">Nom de famille</label>
+                        <input type="text" id="last-name" name="lastName" placeholder="Votre nom" required>
+                    </div>
+                </div>
+
+                <div class="gifts-section">
+                    <label>Mes cadeaux</label>
+                    
+                    <div class="gifts-grid">
+                        <div class="gift-input" data-number="1">
+                            <input type="text" name="gift1" placeholder="Premier souhait" required>
+                        </div>
+                        <div class="gift-input" data-number="2">
+                            <input type="text" name="gift2" placeholder="Deuxième souhait" required>
+                        </div>
+                        <div class="gift-input" data-number="3">
+                            <input type="text" name="gift3" placeholder="Troisième souhait" required>
+                        </div>
+                        <div class="gift-input" data-number="4">
+                            <input type="text" name="gift4" placeholder="Quatrième souhait" required>
+                        </div>
+                        <div class="gift-input" data-number="5">
+                            <input type="text" name="gift5" placeholder="Cinquième souhait" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2.5rem;">
+                    <button type="submit" class="btn">
+                        Enregistrer ma liste
+                    </button>
+                </div>
+            </form>
+            <div id="success-message" style="display: none;" class="success-message"></div>
+        </div>
+
+        <div id="parents-tab" class="tab-content">
+            <h2 style="color: var(--primary-gold); text-align: center; margin-bottom: 2rem; font-size: 1.8rem; font-weight: 600; letter-spacing: -0.01em;">
+                Listes
+            </h2>
+            <div id="children-grid" class="children-grid">
+                <!-- Les cartes d'enfants seront ajoutées ici dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <h3 id="modal-title"></h3>
+            <ul id="modal-gifts" class="gifts-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Stockage en mémoire (remplacera Supabase pour la démo)
+        let childrenData = [];
+
+        // Fonction pour changer d'onglet
+        function switchTab(tabName) {
+            // Désactiver tous les onglets
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Activer l'onglet sélectionné
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+
+            // Rafraîchir la liste des enfants si on va sur l'onglet parents
+            if (tabName === 'parents') {
+                refreshChildrenGrid();
+            }
+        }
+
+        // Gérer la soumission du formulaire enfants
+        document.getElementById('children-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const childData = {
+                id: Date.now(),
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                gifts: [
+                    formData.get('gift1'),
+                    formData.get('gift2'),
+                    formData.get('gift3'),
+                    formData.get('gift4'),
+                    formData.get('gift5')
+                ].filter(gift => gift.trim() !== '') // Enlever les cadeaux vides
+            };
+
+            // Ajouter aux données (ici on simule Supabase)
+            childrenData.push(childData);
+
+            // Afficher le message de succès
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = `Liste de ${childData.firstName} ${childData.lastName} enregistrée avec succès !`;
+            successDiv.style.display = 'block';
+
+            // Réinitialiser le formulaire
+            e.target.reset();
+
+            // Cacher le message après 4 secondes
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 4000);
+        });
+
+        // Rafraîchir la grille des enfants
+        function refreshChildrenGrid() {
+            const grid = document.getElementById('children-grid');
+            
+            if (childrenData.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎁</div>
+                        <div>Aucune liste créée pour le moment</div>
+                        <div style="font-size: 0.9rem; margin-top: 0.5rem;">Les enfants peuvent créer leur liste dans l'onglet "Enfants"</div>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = childrenData.map(child => `
+                <div class="child-card" onclick="openModal(${child.id})">
+                    <div class="child-name">
+                        ${child.firstName} ${child.lastName}
+                    </div>
+                    <div class="gifts-count">
+                        ${child.gifts.length} cadeau${child.gifts.length > 1 ? 's' : ''} souhaité${child.gifts.length > 1 ? 's' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Ouvrir la modal avec les détails d'un enfant
+        function openModal(childId) {
+            const child = childrenData.find(c => c.id === childId);
+            if (!child) return;
+
+            document.getElementById('modal-title').textContent = 
+                `Liste de ${child.firstName} ${child.lastName}`;
+            
+            const giftsList = document.getElementById('modal-gifts');
+            giftsList.innerHTML = child.gifts.map(gift => `<li>${gift}</li>`).join('');
+
+            document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        // Fermer la modal
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+        }
+
+        // Fermer la modal en cliquant sur l'overlay
+        document.getElementById('modal-overlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initialiser avec des données de test
+        childrenData = [
+            {
+                id: 1,
+                firstName: "Emma",
+                lastName: "Dubois",
+                gifts: ["Vélo électrique", "Livre de fantasy", "Casque audio", "Kit d'art numérique", "Tablette graphique"]
+            },
+            {
+                id: 2,
+                firstName: "Lucas",
+                lastName: "Martin",
+                gifts: ["PlayStation 5", "Chaussures de sport", "Set LEGO Architecture", "Livre de programmation"]
+            },
+            {
+                id: 3,
+                firstName: "Sofia",
+                lastName: "Garcia",
+                gifts: ["Appareil photo instantané", "Cours de danse", "Sac à dos vintage"]
+            }
+        ];
+
+        // Initialiser l'affichage
+        refreshChildrenGrid();
+    </script>
+</body>
+</html>
