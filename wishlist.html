@@ -3,39 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whishlist</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    <title>🎁 Liste de Cadeaux Magique</title>
+    <link rel="icon" type="image/png" href="fav.png">
+    
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+  <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
         :root {
-            --primary-gold: #d4af37;
-            --primary-dark: #0f1419;
-            --primary-green: #1a3b2e;
-            --primary-red: #8b1538;
-            --accent-light: #f8f9fa;
-            --accent-warm: #fef7ed;
-            --shadow-light: rgba(255, 255, 255, 0.1);
-            --shadow-dark: rgba(0, 0, 0, 0.2);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            /* Palette de couleurs moderne Version 2 */
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4338ca;
+            --secondary: #ec4899;
+            --secondary-light: #f472b6;
+            --accent: #06b6d4;
+            --accent-light: #67e8f9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            
+            /* Couleurs de base */
+            --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --white: #ffffff;
+            --cream: #fefefe;
+            
+            /* Transparences et effets glassmorphism */
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-hover: rgba(255, 255, 255, 0.25);
+            
+            /* Déclinaisons modernes */
+            --primary-50: rgba(99, 102, 241, 0.05);
+            --primary-100: rgba(99, 102, 241, 0.1);
+            --primary-200: rgba(99, 102, 241, 0.2);
+            --primary-300: rgba(99, 102, 241, 0.3);
+            
+            --secondary-50: rgba(236, 72, 153, 0.05);
+            --secondary-100: rgba(236, 72, 153, 0.1);
+            --secondary-200: rgba(236, 72, 153, 0.2);
+            
+            --accent-50: rgba(6, 182, 212, 0.05);
+            --accent-100: rgba(6, 182, 212, 0.1);
+            --accent-200: rgba(6, 182, 212, 0.2);
+            
+            /* Neutres harmonieux avec le violet */
+            --gray-50: #faf9ff;
+            --gray-100: #f3f2f9;
+            --gray-200: #e8e6f0;
+            --gray-300: #d1cee0;
+            --gray-400: #a8a4b8;
+            --gray-500: #7c7789;
+            --gray-600: #5d5766;
+            --gray-700: #453f4a;
+            --gray-800: #2d2831;
+            --gray-900: #1a1620;
+            
+            /* Ombres */
+            --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            
+            /* Border radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #0f1419 0%, #1a3b2e 35%, #2d1b3d 70%, #8b1538 100%);
+        /* Reset et base */
+    body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--background);
             min-height: 100vh;
-            color: var(--accent-light);
-            position: relative;
-            overflow-x: hidden;
+            color: var(--white);
             line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
         }
 
+        /* Fond avec motif moderne et particules flottantes */
         body::before {
             content: '';
             position: fixed;
@@ -44,267 +119,442 @@
             right: 0;
             bottom: 0;
             background-image: 
-                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(26, 59, 46, 0.03) 0%, transparent 50%);
+                radial-gradient(circle at 25% 25%, var(--primary-100) 2px, transparent 0),
+                radial-gradient(circle at 75% 50%, var(--secondary-100) 1px, transparent 0),
+                radial-gradient(circle at 50% 75%, var(--accent-100) 1.5px, transparent 0),
+                radial-gradient(circle at 80% 20%, var(--primary-50) 1px, transparent 0);
+            background-size: 100px 100px, 150px 150px, 200px 200px, 80px 80px;
+            animation: float 20s ease-in-out infinite;
             pointer-events: none;
+            z-index: 0;
         }
 
-        .container {
-            max-width: 1400px;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(1deg); }
+            66% { transform: translateY(5px) rotate(-1deg); }
+        }
+
+        /* Conteneur principal */
+    .container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: var(--space-8);
             position: relative;
             z-index: 1;
         }
 
+        /* Header avec effet glassmorphism Version 2 */
         .header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: var(--space-16);
             position: relative;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-16);
+            box-shadow: 
+                0 8px 32px rgba(99, 102, 241, 0.15),
+                0 0 0 1px var(--glass-border);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-slow);
+            overflow: hidden;
         }
 
         .header::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary-50), var(--secondary-50), var(--accent-50));
+            opacity: 0.3;
             z-index: -1;
         }
 
+        .header:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 16px 64px rgba(99, 102, 241, 0.2),
+                0 0 0 1px var(--glass-hover);
+        }
+
+
         .header h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #d4af37 0%, #f7e98e 25%, #d4af37 50%, #b8941f 75%, #d4af37 100%);
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 6vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--white), var(--accent-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--space-6);
             letter-spacing: -0.02em;
             position: relative;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        /* Pseudo-élément supprimé - plus d'icône cadeau dans le header
+        .header h1::after {
+            content: '🎁';
+            position: absolute;
+            top: -15px;
+            right: -30px;
+            font-size: 2rem;
+            animation: pulse-gift 2s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        @keyframes pulse-gift {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg); 
+                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+            }
+            50% { 
+                transform: scale(1.1) rotate(5deg); 
+                filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+            }
+        }
+        */
 
         .header p {
-            font-size: 1.1rem;
-            color: rgba(248, 249, 250, 0.7);
-            font-weight: 300;
-            letter-spacing: 0.5px;
+            font-size: 1.2rem;
+            color: var(--white);
+            font-weight: 500;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        /* Navigation par onglets Version 2 */
         .tabs {
             display: flex;
-            justify-content: center;
-            margin-bottom: 3rem;
-            gap: 0;
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-3);
+            max-width: 450px;
+            margin: 0 auto var(--space-16);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 0 0 1px var(--glass-border);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 6px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tabs::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary-100), var(--secondary-100));
+            opacity: 0.1;
+            z-index: -1;
         }
 
         .tab-button {
             flex: 1;
-            padding: 14px 24px;
+            padding: var(--space-5) var(--space-8);
             background: transparent;
             border: none;
-            border-radius: 12px;
-            color: rgba(248, 249, 250, 0.7);
-            font-size: 0.95rem;
-            font-weight: 500;
+            border-radius: var(--radius-xl);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all var(--transition-slow);
+            font-family: inherit;
             position: relative;
-            letter-spacing: 0.3px;
+            z-index: 1;
         }
 
         .tab-button:hover {
-            color: var(--accent-light);
-            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            background: var(--glass-hover);
+            transform: translateY(-1px);
         }
 
         .tab-button.active {
-            background: var(--primary-gold);
             color: var(--primary-dark);
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+            background: linear-gradient(135deg, var(--white), var(--cream));
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
         }
 
+        .tab-button span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+        }
+
+        /* Contenu des onglets Version 2 */
         .tab-content {
             display: none;
             background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 3rem;
-            backdrop-filter: blur(30px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-16);
             box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                0 20px 60px rgba(0, 0, 0, 0.1),
+                0 0 0 1px var(--glass-border);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary-50), var(--secondary-50));
+            opacity: 0.2;
+            z-index: -1;
         }
 
         .tab-content.active {
             display: block;
-            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideInGlass 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes slideUp {
+        @keyframes slideInGlass {
             from { 
                 opacity: 0; 
-                transform: translateY(30px);
+                transform: translateY(30px) scale(0.95);
+                backdrop-filter: blur(0px);
             }
             to { 
-                opacity: 1; 
-                transform: translateY(0);
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                backdrop-filter: blur(20px);
             }
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
+        /* Formulaires */
+    .form-group {
+            margin-bottom: var(--space-8);
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            gap: var(--space-8);
+            margin-bottom: var(--space-8);
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            color: var(--primary-gold);
-            font-weight: 500;
-            font-size: 0.9rem;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
+            margin-bottom: var(--space-3);
+            color: var(--white);
+            font-weight: 600;
+      font-size: 0.95rem;
         }
 
-        .form-group input {
+        .form-group input,
+        .form-group textarea {
             width: 100%;
-            padding: 16px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            padding: var(--space-4) var(--space-5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, 0.9);
             font-size: 1rem;
-            color: var(--accent-light);
-            font-weight: 400;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--gray-800);
+            font-weight: 500;
+            transition: all var(--transition);
             font-family: inherit;
         }
 
-        .form-group input::placeholder {
-            color: rgba(248, 249, 250, 0.4);
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--gray-400);
         }
 
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group textarea:focus {
             outline: none;
-            border-color: var(--primary-gold);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+            border-color: var(--white);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+            background: var(--white);
         }
 
-        .gifts-section {
-            margin-top: 2.5rem;
+        .form-group input:hover,
+        .form-group textarea:hover {
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
-        .gifts-section > label {
-            display: block;
-            color: var(--primary-gold);
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            text-align: left;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-
+        /* Grille des cadeaux */
         .gifts-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-6);
         }
 
-        .gift-input {
-            position: relative;
+        .gifts-footer {
+            text-align: center;
+            margin-top: var(--space-4);
         }
 
-        .gift-input input {
-            padding-left: 50px;
-        }
-
-        .gift-input::before {
-            content: attr(data-number);
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--primary-gold);
-            color: var(--primary-dark);
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
+        .gifts-footer small {
+            color: var(--primary);
+            font-size: 0.85rem;
             font-weight: 600;
-            z-index: 2;
+            padding: var(--space-3) var(--space-5);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-full);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            display: inline-block;
         }
 
-        .btn {
-            background: linear-gradient(135deg, var(--primary-gold) 0%, #f7e98e 100%);
-            border: none;
-            border-radius: 14px;
-            color: var(--primary-dark);
-            padding: 16px 32px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
-            letter-spacing: 0.3px;
-            font-family: inherit;
-            text-transform: uppercase;
+        /* Section de soumission */
+        .submit-section {
+            text-align: center;
+            margin-top: var(--space-12);
+            padding-top: var(--space-8);
+        }
+
+        .submit-hint {
+            margin-top: var(--space-4);
+            color: rgba(255, 255, 255, 0.8);
             font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Message d'accueil Version 2 */
+        .welcome-message {
+            text-align: center;
+            margin-bottom: var(--space-16);
+            padding: var(--space-12);
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: var(--radius-2xl);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary-50), var(--accent-50));
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .welcome-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-6);
+            animation: pulse-star 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-star {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(10deg); }
+        }
+
+        .welcome-message h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: var(--space-4);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-message p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+
+        /* Boutons Version 2 */
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            border: none;
+            border-radius: var(--radius-2xl);
+            color: var(--white);
+            padding: var(--space-6) var(--space-12);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-slow);
+            box-shadow: 
+                0 8px 32px rgba(99, 102, 241, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 16px 48px rgba(99, 102, 241, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light), var(--accent-light));
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:active {
-            transform: translateY(0);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 
+                0 8px 24px rgba(99, 102, 241, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
         }
 
+        /* Grille d'enfants */
         .children-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+      display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin-top: var(--space-8);
         }
 
         .child-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(20px);
+            transition: all var(--transition);
+            box-shadow: var(--shadow-sm);
             position: relative;
-            overflow: hidden;
         }
 
         .child-card::before {
@@ -314,15 +564,17 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary-gold), #f7e98e);
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
             transform: scaleX(0);
-            transition: transform 0.3s ease;
+            transition: transform var(--transition);
         }
 
         .child-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(212, 175, 55, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--white);
+            background: var(--white);
         }
 
         .child-card:hover::before {
@@ -330,52 +582,51 @@
         }
 
         .child-name {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--accent-light);
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.01em;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: var(--space-2);
+            letter-spacing: -0.02em;
         }
 
         .gifts-count {
-            color: rgba(248, 249, 250, 0.6);
-            font-size: 0.9rem;
-            font-weight: 400;
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.5;
         }
 
+        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(15, 20, 25, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
             z-index: 1000;
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: var(--space-8);
         }
 
         .modal-overlay.active {
-            display: flex;
-            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+            animation: fadeIn 0.2s ease;
         }
 
         .modal {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 3rem;
-            max-width: 500px;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-12);
+            max-width: 600px;
             width: 100%;
-            backdrop-filter: blur(30px);
             position: relative;
-            box-shadow: 
-                0 40px 80px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            animation: modalSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-xl);
+            animation: modalSlide 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes fadeIn {
@@ -386,7 +637,7 @@
         @keyframes modalSlide {
             from { 
                 opacity: 0;
-                transform: scale(0.9) translateY(20px);
+                transform: scale(0.95) translateY(10px);
             }
             to { 
                 opacity: 1;
@@ -396,102 +647,146 @@
 
         .modal-close {
             position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: rgba(248, 249, 250, 0.6);
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            top: var(--space-4);
+            right: var(--space-4);
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            color: var(--gray-600);
+            font-size: 1.25rem;
+      cursor: pointer;
+            padding: var(--space-2);
+            border-radius: var(--radius-full);
+            transition: all var(--transition);
             width: 36px;
             height: 36px;
-            display: flex;
-            align-items: center;
+      display: flex;
+      align-items: center;
             justify-content: center;
         }
 
         .modal-close:hover {
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--accent-light);
-            transform: rotate(90deg);
+            background: var(--gray-200);
+            color: var(--gray-800);
         }
 
         .modal h3 {
-            color: var(--primary-gold);
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-8);
             text-align: center;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
         }
 
+        /* Liste des cadeaux avec système de cochage */
         .gifts-list {
             list-style: none;
             padding: 0;
             display: grid;
-            gap: 0.75rem;
+            gap: var(--space-3);
         }
 
-        .gifts-list li {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem 1.25rem;
-            border-radius: 12px;
-            border-left: 3px solid var(--primary-gold);
-            font-size: 1rem;
-            font-weight: 400;
-            color: var(--accent-light);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .gifts-list li:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateX(4px);
-        }
-
-        .gifts-list li::before {
-            content: counter(gift-counter);
-            counter-increment: gift-counter;
-            position: absolute;
-            left: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--primary-gold);
-            color: var(--primary-dark);
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .gifts-list {
-            counter-reset: gift-counter;
-        }
-
-        .success-message {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(16, 185, 129, 0.9));
-            color: white;
-            padding: 1.25rem 1.5rem;
-            border-radius: 16px;
-            margin-top: 2rem;
-            text-align: center;
+        .gift-item {
+            background: var(--gray-50);
+            padding: var(--space-4) var(--space-5);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-200);
+            font-size: 0.95rem;
             font-weight: 500;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: successSlide 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--gray-800);
+            transition: all var(--transition);
+      display: flex;
+            align-items: center;
+            gap: var(--space-4);
+      cursor: pointer;
+        }
+
+        .gift-item:hover {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+        }
+
+        .gift-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-400);
+            border-radius: var(--radius-sm);
+            background: var(--white);
+      cursor: pointer;
+            transition: all var(--transition);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .gift-checkbox.checked {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .gift-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .gift-text {
+            flex: 1;
+            transition: all var(--transition);
+        }
+
+        .gift-item.completed .gift-text {
+            text-decoration: line-through;
+            opacity: 0.6;
+            color: var(--gray-500);
+        }
+
+        .gift-item.completed {
+            background: var(--gray-100);
+            border-color: var(--success);
+        }
+
+        /* Messages de succès */
+        .success-message {
+            background: linear-gradient(135deg, var(--success), var(--secondary));
+            color: var(--white);
+            padding: var(--space-5) var(--space-6);
+            border-radius: var(--radius-lg);
+            margin-top: var(--space-8);
+            text-align: center;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: successSlide 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 2s ease-in-out;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         @keyframes successSlide {
             from { 
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(10px);
             }
             to { 
                 opacity: 1;
@@ -499,125 +794,211 @@
             }
         }
 
-        .empty-state {
+        /* État vide */
+    .empty-state {
             grid-column: 1/-1;
-            text-align: center;
-            padding: 4rem 2rem;
-            color: rgba(248, 249, 250, 0.5);
+      text-align: center;
+            padding: var(--space-16) var(--space-8);
+            color: rgba(255, 255, 255, 0.8);
             font-size: 1.1rem;
             line-height: 1.8;
         }
 
         .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.3;
+            font-size: 3rem;
+            margin-bottom: var(--space-6);
+            opacity: 0.8;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
             .container {
-                padding: 1.5rem;
+                padding: var(--space-6);
             }
 
-            .header h1 {
-                font-size: 2.5rem;
+            .header {
+                padding: var(--space-8);
+                margin-bottom: var(--space-12);
             }
 
-            .form-row,
-            .gifts-grid {
+            .form-row {
                 grid-template-columns: 1fr;
+                gap: var(--space-6);
             }
 
             .tab-content {
-                padding: 2rem;
+                padding: var(--space-8);
             }
 
             .modal {
-                padding: 2rem;
-                margin: 1rem;
+                padding: var(--space-8);
+                margin: var(--space-4);
             }
 
             .children-grid {
                 grid-template-columns: 1fr;
+                gap: var(--space-4);
+            }
+
+            .child-card {
+                padding: var(--space-6);
             }
         }
 
         @media (max-width: 480px) {
             .header h1 {
-                font-size: 2rem;
-            }
+        font-size: 2rem;
+      }
 
             .tabs {
                 max-width: none;
-                margin: 0 0 2rem 0;
+                margin: 0 0 var(--space-8) 0;
             }
-        }
-    </style>
+
+            .tab-button {
+                padding: var(--space-3) var(--space-5);
+        font-size: 0.9rem;
+      }
+
+            .form-group input,
+            .form-group textarea {
+                padding: var(--space-4);
+      }
+
+            .btn {
+                padding: var(--space-4) var(--space-6);
+                font-size: 0.95rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
+  <div class="container">
         <div class="header">
-            <h1>Listes de Cadeaux</h1>
-            <p>Créez et consultez les souhaits de fin d'année</p>
+            <h1>Liste de Cadeaux</h1>
+            <p>Créez et consultez les souhaits de fin d'année en famille</p>
         </div>
 
         <div class="tabs">
             <button class="tab-button active" onclick="switchTab('children')">
-                Enfants
+                <span>👶 Enfants</span>
             </button>
             <button class="tab-button" onclick="switchTab('parents')">
-                Parents
+                <span>👨‍👩‍👧‍👦 Parents</span>
             </button>
-        </div>
+      </div>
 
         <div id="children-tab" class="tab-content active">
+            <!-- Message d'accueil interactif Version 2 -->
+            <div class="welcome-message">
+                <div class="welcome-icon">🌟</div>
+                <h2>Salut Tout le Monde !</h2>
+                <p>Voici les cadeaux que j'aimerais avoir pour cette année magique !</p>
+            </div>
+
             <form id="children-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="first-name">Prénom</label>
-                        <input type="text" id="first-name" name="firstName" placeholder="Votre prénom" required>
+                <!-- Étape 1: Identité -->
+                <div class="form-step" id="step-1">
+                    <div class="step-header">
+                        <span class="step-number">1</span>
+                        <h3>👋 Qui es-tu ?</h3>
                     </div>
-                    <div class="form-group">
-                        <label for="last-name">Nom de famille</label>
-                        <input type="text" id="last-name" name="lastName" placeholder="Votre nom" required>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">
+                                <span class="label-icon">🧸</span>
+                                <span class="label-text">Ton joli prénom</span>
+                            </label>
+                            <input type="text" id="first-name" name="firstName" placeholder="Écris ton prénom ici..." required>
+                            <div class="input-feedback" id="firstname-feedback"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">
+                                <span class="label-icon">🏠</span>
+                                <span class="label-text">Nom de ta famille</span>
+                            </label>
+                            <input type="text" id="last-name" name="lastName" placeholder="Ton nom de famille..." required>
+                            <div class="input-feedback" id="lastname-feedback"></div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="gifts-section">
-                    <label>Mes cadeaux</label>
+                <!-- Étape 2: Liste de cadeaux -->
+                <div class="form-step" id="step-2">
+                    <div class="step-header">
+                        <span class="step-number">2</span>
+                        <h3>🎁 Tes souhaits magiques</h3>
+                    </div>
                     
                     <div class="gifts-grid">
-                        <div class="gift-input" data-number="1">
-                            <input type="text" name="gift1" placeholder="Premier souhait" required>
+                        <div class="form-group">
+                            <label for="gift-1">🎁 Cadeau 1</label>
+                            <input type="text" id="gift-1" name="gift1" placeholder="Écris ton premier souhait...">
                         </div>
-                        <div class="gift-input" data-number="2">
-                            <input type="text" name="gift2" placeholder="Deuxième souhait" required>
+                        <div class="form-group">
+                            <label for="gift-2">🎁 Cadeau 2</label>
+                            <input type="text" id="gift-2" name="gift2" placeholder="Écris ton deuxième souhait...">
                         </div>
-                        <div class="gift-input" data-number="3">
-                            <input type="text" name="gift3" placeholder="Troisième souhait" required>
+                        <div class="form-group">
+                            <label for="gift-3">🎁 Cadeau 3</label>
+                            <input type="text" id="gift-3" name="gift3" placeholder="Écris ton troisième souhait...">
                         </div>
-                        <div class="gift-input" data-number="4">
-                            <input type="text" name="gift4" placeholder="Quatrième souhait" required>
+                        <div class="form-group">
+                            <label for="gift-4">🎁 Cadeau 4</label>
+                            <input type="text" id="gift-4" name="gift4" placeholder="Écris ton quatrième souhait...">
                         </div>
-                        <div class="gift-input" data-number="5">
-                            <input type="text" name="gift5" placeholder="Cinquième souhait" required>
+                        <div class="form-group">
+                            <label for="gift-5">🎁 Cadeau 5</label>
+                            <input type="text" id="gift-5" name="gift5" placeholder="Écris ton cinquième souhait...">
                         </div>
+                        <div class="form-group">
+                            <label for="gift-6">🎁 Cadeau 6</label>
+                            <input type="text" id="gift-6" name="gift6" placeholder="Écris ton sixième souhait...">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-7">🎁 Cadeau 7</label>
+                            <input type="text" id="gift-7" name="gift7" placeholder="Écris ton septième souhait...">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-8">🎁 Cadeau 8</label>
+                            <input type="text" id="gift-8" name="gift8" placeholder="Écris ton huitième souhait...">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-9">🎁 Cadeau 9</label>
+                            <input type="text" id="gift-9" name="gift9" placeholder="Écris ton neuvième souhait...">
+                        </div>
+                        <div class="form-group">
+                            <label for="gift-10">🎁 Cadeau 10</label>
+                            <input type="text" id="gift-10" name="gift10" placeholder="Écris ton dixième souhait...">
+                        </div>
+                    </div>
+                    <div class="gifts-footer">
+                        <small>💫 Remplis autant de champs que tu veux !</small>
                     </div>
                 </div>
 
-                <div style="text-align: center; margin-top: 2.5rem;">
-                    <button type="submit" class="btn">
-                        Enregistrer ma liste
+                <!-- Bouton d'envoi magique -->
+                <div class="submit-section">
+                    <button type="submit" class="btn magic-btn" id="submit-btn">
+                        <span class="btn-icon">🪄</span>
+                        <span class="btn-text">Envoyer ma liste</span>
+                        <span class="btn-sparkles">✨</span>
                     </button>
+                    <div class="submit-hint">
+                        <span id="submit-hint-text">Remplis ton nom et au moins un cadeau ! 📝</span>
+                    </div>
                 </div>
             </form>
+            
             <div id="success-message" style="display: none;" class="success-message"></div>
         </div>
 
         <div id="parents-tab" class="tab-content">
-            <h2 style="color: var(--primary-gold); text-align: center; margin-bottom: 2rem; font-size: 1.8rem; font-weight: 600; letter-spacing: -0.01em;">
-                Listes
+            <h2 style="color: var(--white); text-align: center; margin-bottom: 3rem; font-size: 2rem; font-weight: 700; letter-spacing: -0.02em;">
+                📋 Listes des enfants
             </h2>
+            
             <div id="children-grid" class="children-grid">
                 <!-- Les cartes d'enfants seront ajoutées ici dynamiquement -->
             </div>
@@ -633,11 +1014,216 @@
     </div>
 
     <script>
-        // Stockage en mémoire (remplacera Supabase pour la démo)
+        // Configuration Supabase
+        const SUPABASE_URL = 'https://egmkwxzaxdqaalsaocrm.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnbWt3eHpheGRxYWFsc2FvY3JtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4OTQ0MjIsImV4cCI6MjA3NDQ3MDQyMn0.gvNEj-RLyubb6_-3H6YujJPCpe02D24e6KrITW-tywA'
+        
+        let supabase;
+        
+        // Initialiser Supabase
+        function initSupabase() {
+            if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL === 'VOTRE_SUPABASE_URL' || SUPABASE_ANON_KEY === 'VOTRE_SUPABASE_ANON_KEY') {
+                console.warn('⚠️ Configuration Supabase manquante - utilisation du mode local');
+                return false;
+            }
+            
+            try {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase initialisé avec succès');
+                return true;
+            } catch (error) {
+                console.error('❌ Erreur d\'initialisation Supabase:', error);
+                return false;
+            }
+        }
+        
+        // Variables globales
         let childrenData = [];
+        let giftStatus = {}; // Pour stocker l'état des cadeaux cochés
+        let isSupabaseEnabled = false;
+        let useLocalStorage = false; // Fallback vers localStorage si Supabase ne marche pas
+        
+        // Fonctions de base de données
+        
+        // Sauvegarder un enfant en DB
+        async function saveChildToDB(childData) {
+            if (!isSupabaseEnabled) return null;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('children')
+                    .insert([{
+                        first_name: childData.firstName,
+                        last_name: childData.lastName,
+                        gifts: childData.gifts,
+                        created_at: new Date().toISOString()
+                    }])
+                    .select();
+                
+                if (error) throw error;
+                return data[0];
+            } catch (error) {
+                console.error('Erreur sauvegarde enfant:', error);
+                showNotification('❌ Erreur de sauvegarde', 'warning');
+                return null;
+            }
+        }
+        
+        // Charger tous les enfants depuis la DB
+        async function loadChildrenFromDB() {
+            if (!isSupabaseEnabled) {
+                console.log('❌ Supabase non activé');
+                return [];
+            }
+            
+            try {
+                console.log('🔍 Tentative de chargement depuis Supabase...');
+                const { data, error } = await supabase
+                    .from('children')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    console.error('❌ Erreur Supabase:', error);
+                    throw error;
+                }
+                
+                console.log('✅ Données brutes reçues:', data);
+                console.log('✅ Nombre d\'enregistrements:', data.length);
+                
+                if (data.length === 0) {
+                    console.log('📭 Aucun enfant trouvé en base');
+                    return [];
+                }
+                
+                const processedData = data.map((child, index) => {
+                    console.log(`🔍 Traitement enfant ${index + 1}:`, child);
+                    
+                    // Gérer différents formats de données gifts
+                    let gifts = [];
+                    if (child.gifts) {
+                        if (Array.isArray(child.gifts)) {
+                            gifts = child.gifts;
+                        } else if (typeof child.gifts === 'string') {
+                            try {
+                                gifts = JSON.parse(child.gifts);
+                            } catch {
+                                gifts = [child.gifts];
+                            }
+                        }
+                    }
+                    
+                    const processedChild = {
+                        id: child.id,
+                        firstName: child.first_name || child.firstName || 'Prénom manquant',
+                        lastName: child.last_name || child.lastName || 'Nom manquant',
+                        gifts: gifts
+                    };
+                    
+                    console.log(`✅ Enfant traité:`, processedChild);
+                    return processedChild;
+                });
+                
+                console.log('✅ Toutes les données traitées:', processedData);
+                return processedData;
+            } catch (error) {
+                console.error('❌ Erreur chargement enfants:', error);
+                console.error('❌ Détails de l\'erreur:', error.message);
+                return [];
+            }
+        }
+        
+        // Sauvegarder l'état d'un cadeau (coché/non coché)
+        async function saveGiftStatus(childId, giftText, isChecked) {
+            const key = `${childId}_${giftText}`;
+            
+            // Toujours sauvegarder en localStorage
+            const localData = JSON.parse(localStorage.getItem('giftStatuses') || '{}');
+            localData[key] = isChecked;
+            localStorage.setItem('giftStatuses', JSON.stringify(localData));
+            console.log(`💾 Sauvegardé en localStorage: ${key} = ${isChecked}`);
+            
+            // Essayer aussi Supabase si disponible
+            if (isSupabaseEnabled) {
+                try {
+                    console.log(`💾 Tentative sauvegarde Supabase: enfant ${childId}, cadeau "${giftText}", état ${isChecked}`);
+                    
+                    const { data, error } = await supabase
+                        .from('gift_status')
+                        .upsert([{
+                            child_id: childId,
+                            gift_text: giftText,
+                            is_checked: isChecked,
+                            updated_at: new Date().toISOString()
+                        }], {
+                            onConflict: 'child_id,gift_text'
+                        })
+                        .select();
+                    
+                    if (error) {
+                        console.warn('⚠️ Erreur Supabase pour statuts, utilisation localStorage:', error);
+                        useLocalStorage = true;
+                    } else {
+                        console.log('✅ Statut sauvegardé en Supabase:', data);
+                    }
+                } catch (error) {
+                    console.warn('⚠️ Supabase indisponible pour statuts, utilisation localStorage:', error);
+                    useLocalStorage = true;
+                }
+            }
+        }
+        
+        // Charger tous les statuts de cadeaux (hybride localStorage + Supabase)
+        async function loadGiftStatus() {
+            let status = {};
+            
+            // Charger depuis localStorage en priorité
+            try {
+                const localData = localStorage.getItem('giftStatuses');
+                if (localData) {
+                    status = JSON.parse(localData);
+                    console.log('✅ Statuts chargés depuis localStorage:', status);
+                }
+            } catch (error) {
+                console.warn('⚠️ Erreur localStorage:', error);
+            }
+            
+            // Essayer de charger depuis Supabase si disponible et pas en mode localStorage
+            if (isSupabaseEnabled && !useLocalStorage) {
+                try {
+                    console.log('🔍 Chargement des statuts depuis Supabase...');
+                    const { data, error } = await supabase
+                        .from('gift_status')
+                        .select('*');
+                    
+                    if (error) {
+                        console.warn('⚠️ Erreur Supabase statuts, utilisation localStorage:', error);
+                        useLocalStorage = true;
+                    } else {
+                        console.log('✅ Statuts Supabase reçus:', data);
+                        
+                        // Fusionner avec localStorage (Supabase prioritaire si conflit)
+                        data.forEach(item => {
+                            const key = `${item.child_id}_${item.gift_text}`;
+                            status[key] = item.is_checked;
+                            console.log(`📌 Statut Supabase: ${key} = ${item.is_checked}`);
+                        });
+                        
+                        // Sauvegarder la fusion en localStorage
+                        localStorage.setItem('giftStatuses', JSON.stringify(status));
+                    }
+                } catch (error) {
+                    console.warn('⚠️ Supabase indisponible pour statuts:', error);
+                    useLocalStorage = true;
+                }
+            }
+            
+            console.log('✅ Statuts finaux (hybride):', status);
+            return status;
+        }
 
         // Fonction pour changer d'onglet
-        function switchTab(tabName) {
+        async function switchTab(tabName) {
             // Désactiver tous les onglets
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
@@ -648,74 +1234,117 @@
 
             // Activer l'onglet sélectionné
             document.getElementById(tabName + '-tab').classList.add('active');
-            event.target.classList.add('active');
+            event.target.closest('.tab-button').classList.add('active');
 
-            // Rafraîchir la liste des enfants si on va sur l'onglet parents
+            // Recharger les données depuis la DB si on va sur l'onglet parents
+            if (tabName === 'parents' && isSupabaseEnabled) {
+                console.log('🔄 Rechargement des données depuis Supabase...');
+                childrenData = await loadChildrenFromDB();
+                giftStatus = await loadGiftStatus(); // Utilise le système hybride
+                console.log(`📋 ${childrenData.length} enfant(s) rechargé(s)`);
+            }
+            
+            // Rafraîchir l'affichage
             if (tabName === 'parents') {
                 refreshChildrenGrid();
             }
         }
 
         // Gérer la soumission du formulaire enfants
-        document.getElementById('children-form').addEventListener('submit', function(e) {
+        document.getElementById('children-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(e.target);
+            
+            // Collecter les cadeaux depuis les 10 inputs
+            const gifts = [];
+            for (let i = 1; i <= 10; i++) {
+                const giftValue = formData.get(`gift${i}`);
+                if (giftValue && giftValue.trim()) {
+                    gifts.push(giftValue.trim());
+                }
+            }
+            
+            // Vérifier qu'il y a au moins un cadeau
+            if (gifts.length === 0) {
+                showNotification('🎁 Tu dois écrire au moins un souhait de cadeau !', 'warning');
+                return;
+            }
+
             const childData = {
-                id: Date.now(),
                 firstName: formData.get('firstName'),
                 lastName: formData.get('lastName'),
-                gifts: [
-                    formData.get('gift1'),
-                    formData.get('gift2'),
-                    formData.get('gift3'),
-                    formData.get('gift4'),
-                    formData.get('gift5')
-                ].filter(gift => gift.trim() !== '') // Enlever les cadeaux vides
+                gifts: gifts
             };
 
-            // Ajouter aux données (ici on simule Supabase)
+            // Sauvegarder en base de données
+            const savedChild = await saveChildToDB(childData);
+            
+            if (savedChild) {
+                // Utiliser l'ID de la base de données
+                childData.id = savedChild.id;
+            } else {
+                // Mode local si Supabase non disponible
+                childData.id = Date.now();
+            }
+
+            // Ajouter aux données locales
             childrenData.push(childData);
 
             // Afficher le message de succès
             const successDiv = document.getElementById('success-message');
-            successDiv.textContent = `Liste de ${childData.firstName} ${childData.lastName} enregistrée avec succès !`;
+            successDiv.innerHTML = `🎉 Liste de ${childData.firstName} ${childData.lastName} ${isSupabaseEnabled ? 'sauvegardée' : 'créée'} avec succès !<br>`;
             successDiv.style.display = 'block';
 
             // Réinitialiser le formulaire
             e.target.reset();
 
-            // Cacher le message après 4 secondes
+            // Cacher le message après 5 secondes
             setTimeout(() => {
                 successDiv.style.display = 'none';
-            }, 4000);
+            }, 5000);
         });
 
         // Rafraîchir la grille des enfants
         function refreshChildrenGrid() {
+            console.log('🔄 Rafraîchissement de la grille...');
             const grid = document.getElementById('children-grid');
+            console.log('📊 childrenData actuelles:', childrenData);
+            console.log('📊 Nombre d\'enfants:', childrenData ? childrenData.length : 'undefined');
             
-            if (childrenData.length === 0) {
+            if (!childrenData || childrenData.length === 0) {
+                console.log('📭 Aucune donnée à afficher');
                 grid.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">🎁</div>
                         <div>Aucune liste créée pour le moment</div>
-                        <div style="font-size: 0.9rem; margin-top: 0.5rem;">Les enfants peuvent créer leur liste dans l'onglet "Enfants"</div>
+                        <div style="font-size: 1rem; margin-top: 1rem; opacity: 0.8; color: rgba(255, 255, 255, 0.7);">
+                            ${isSupabaseEnabled ? 'Les listes apparaîtront ici une fois créées dans l\'onglet "Enfants"' : 'Veuillez configurer Supabase pour voir les listes'}
+                        </div>
                     </div>
                 `;
                 return;
             }
+            
+            console.log('✅ Affichage des données...');
 
-            grid.innerHTML = childrenData.map(child => `
-                <div class="child-card" onclick="openModal(${child.id})">
-                    <div class="child-name">
-                        ${child.firstName} ${child.lastName}
-                    </div>
-                    <div class="gifts-count">
-                        ${child.gifts.length} cadeau${child.gifts.length > 1 ? 's' : ''} souhaité${child.gifts.length > 1 ? 's' : ''}
-                    </div>
-                </div>
-            `).join('');
+            grid.innerHTML = childrenData.map(child => {
+                const completedGifts = child.gifts.filter(gift => 
+                    giftStatus[`${child.id}_${gift}`]
+                ).length;
+                
+                return `
+                    <div class="child-card" onclick="openModal(${child.id})">
+                        <div class="child-name">
+                            ${child.firstName} ${child.lastName}
+        </div>
+                        <div class="gifts-count">
+                            ${child.gifts.length} cadeau${child.gifts.length > 1 ? 's' : ''} souhaité${child.gifts.length > 1 ? 's' : ''}
+                            ${completedGifts > 0 ? `<br><span style="color: #22c55e;">✅ ${completedGifts} sélectionné${completedGifts > 1 ? 's' : ''}</span>` : ''}
+        </div>
+      </div>
+    `;
+            }).join('');
         }
 
         // Ouvrir la modal avec les détails d'un enfant
@@ -723,13 +1352,60 @@
             const child = childrenData.find(c => c.id === childId);
             if (!child) return;
 
+            console.log(`🔍 Ouverture modal pour enfant ${childId}:`, child);
+            console.log('🎁 Statuts actuels:', giftStatus);
+
             document.getElementById('modal-title').textContent = 
-                `Liste de ${child.firstName} ${child.lastName}`;
+                `🎁 Liste de ${child.firstName} ${child.lastName}`;
             
             const giftsList = document.getElementById('modal-gifts');
-            giftsList.innerHTML = child.gifts.map(gift => `<li>${gift}</li>`).join('');
+            giftsList.innerHTML = child.gifts.map((gift, index) => {
+                const giftKey = `${child.id}_${gift}`;
+                const isCompleted = giftStatus[giftKey] || false;
+                
+                console.log(`📦 Cadeau "${gift}": clé="${giftKey}", état=${isCompleted}`);
+                
+                return `
+                    <li class="gift-item ${isCompleted ? 'completed' : ''}" onclick="toggleGift('${giftKey}', this)">
+                        <div class="gift-checkbox ${isCompleted ? 'checked' : ''}"></div>
+                        <div class="gift-text">${gift}</div>
+                    </li>
+                `;
+            }).join('');
 
             document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        // Basculer l'état d'un cadeau (coché/non coché)
+        async function toggleGift(giftKey, element) {
+            console.log(`🔄 Toggle cadeau: ${giftKey}`);
+            
+            giftStatus[giftKey] = !giftStatus[giftKey];
+            
+            const checkbox = element.querySelector('.gift-checkbox');
+            const isCompleted = giftStatus[giftKey];
+            
+            // Extraire childId et giftText du giftKey
+            const [childId, ...giftTextParts] = giftKey.split('_');
+            const giftText = giftTextParts.join('_');
+            
+            console.log(`📝 Données à sauvegarder: childId=${childId}, giftText="${giftText}", isCompleted=${isCompleted}`);
+            
+            // Sauvegarder avec le nouveau système hybride
+            await saveGiftStatus(parseInt(childId), giftText, isCompleted);
+            
+            if (isCompleted) {
+                element.classList.add('completed');
+                checkbox.classList.add('checked');
+                showNotification('✅ Cadeau sélectionné ! Il apparaîtra comme prévu.', 'success');
+            } else {
+                element.classList.remove('completed');
+                checkbox.classList.remove('checked');
+                showNotification('❌ Cadeau désélectionné.', 'info');
+            }
+
+            // Mettre à jour l'affichage de la grille
+            setTimeout(refreshChildrenGrid, 100);
         }
 
         // Fermer la modal
@@ -744,30 +1420,179 @@
             }
         });
 
-        // Initialiser avec des données de test
-        childrenData = [
-            {
-                id: 1,
-                firstName: "Emma",
-                lastName: "Dubois",
-                gifts: ["Vélo électrique", "Livre de fantasy", "Casque audio", "Kit d'art numérique", "Tablette graphique"]
-            },
-            {
-                id: 2,
-                firstName: "Lucas",
-                lastName: "Martin",
-                gifts: ["PlayStation 5", "Chaussures de sport", "Set LEGO Architecture", "Livre de programmation"]
-            },
-            {
-                id: 3,
-                firstName: "Sofia",
-                lastName: "Garcia",
-                gifts: ["Appareil photo instantané", "Cours de danse", "Sac à dos vintage"]
-            }
-        ];
+        // Système de notifications
+        function showNotification(message, type = 'info') {
+            // Supprimer les anciennes notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notif => notif.remove());
 
-        // Initialiser l'affichage
-        refreshChildrenGrid();
-    </script>
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: rgba(255, 255, 255, 0.95);
+                border: 2px solid rgba(80, 32, 122, 0.3);
+                color: var(--primary);
+                padding: 1rem 1.5rem;
+                border-radius: var(--radius-lg);
+                backdrop-filter: blur(20px);
+                box-shadow: var(--shadow-lg);
+                z-index: 9999;
+                font-weight: 600;
+                max-width: 300px;
+                animation: slideInRight 0.3s ease;
+            `;
+            
+            if (type === 'success') {
+                notification.style.borderColor = 'var(--success)';
+                notification.style.color = 'var(--success)';
+            } else if (type === 'warning') {
+                notification.style.borderColor = 'var(--warning)';
+                notification.style.color = 'var(--warning)';
+            }
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Supprimer après 3 secondes
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Animation pour les notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Fonction d'initialisation
+        async function initApp() {
+            console.log('🚀 Initialisation de l\'application...');
+            
+            // Initialiser Supabase
+            isSupabaseEnabled = initSupabase();
+            console.log('🔧 Supabase activé:', isSupabaseEnabled);
+            
+            if (isSupabaseEnabled) {
+                // Charger les données depuis Supabase
+                console.log('📡 Chargement des données depuis Supabase...');
+                childrenData = await loadChildrenFromDB();
+                giftStatus = await loadGiftStatus(); // Utilise le système hybride
+                console.log(`📋 ${childrenData.length} enfant(s) chargé(s) depuis la base de données`);
+                console.log('👥 childrenData final:', childrenData);
+            } else {
+                // Mode local - charger quand même les statuts depuis localStorage
+                console.log('💾 Mode local - chargement localStorage');
+                childrenData = [];
+                giftStatus = await loadGiftStatus(); // Charge depuis localStorage
+            }
+            
+            // Initialiser l'affichage
+            console.log('🎨 Initialisation de l\'affichage...');
+            refreshChildrenGrid();
+            console.log('✅ Application initialisée');
+        }
+
+        // Fonctions de débogage
+        async function debugReload() {
+            console.log('🔄 DÉBOGAGE: Rechargement forcé des données...');
+            if (isSupabaseEnabled) {
+                childrenData = await loadChildrenFromDB();
+                giftStatus = await loadGiftStatus(); // Utilise le système hybride
+                refreshChildrenGrid();
+                showNotification('✅ Données rechargées !', 'success');
+            } else {
+                giftStatus = await loadGiftStatus(); // Charge depuis localStorage
+                showNotification('✅ Statuts rechargés depuis localStorage', 'success');
+            }
+        }
+        
+        async function testSupabase() {
+            console.log('🧪 TEST: Connexion Supabase...');
+            console.log('URL:', SUPABASE_URL);
+            console.log('Clé présente:', SUPABASE_ANON_KEY ? 'Oui' : 'Non');
+            console.log('Supabase activé:', isSupabaseEnabled);
+            
+            if (isSupabaseEnabled) {
+                try {
+                    // Test 1: Compter les enregistrements
+                    const { count, error: countError } = await supabase
+                        .from('children')
+                        .select('*', { count: 'exact', head: true });
+                    
+                    if (countError) {
+                        console.error('❌ Erreur count:', countError);
+                        showNotification(`❌ Erreur count: ${countError.message}`, 'warning');
+                        return;
+                    }
+                    
+                    console.log('📊 Nombre total d\'enfants:', count);
+                    
+                    // Test 2: Récupérer les données brutes
+                    const { data: rawData, error: dataError } = await supabase
+                        .from('children')
+                        .select('*');
+                    
+                    if (dataError) {
+                        console.error('❌ Erreur données:', dataError);
+                        showNotification(`❌ Erreur données: ${dataError.message}`, 'warning');
+                        return;
+                    }
+                    
+                    console.log('📋 Données brutes complètes:', rawData);
+                    console.log('📋 Structure première ligne:', rawData[0]);
+                    
+                    // Test 3: Vérifier les colonnes
+                    if (rawData && rawData.length > 0) {
+                        const firstRow = rawData[0];
+                        console.log('🔍 Colonnes disponibles:', Object.keys(firstRow));
+                        console.log('🔍 first_name:', firstRow.first_name);
+                        console.log('🔍 last_name:', firstRow.last_name);
+                        console.log('🔍 gifts:', firstRow.gifts);
+                        console.log('🔍 Type de gifts:', typeof firstRow.gifts);
+                    }
+                    
+                    showNotification(`✅ ${count} enfant(s) trouvé(s) en base !`, 'success');
+                    
+                } catch (err) {
+                    console.error('❌ Erreur de connexion:', err);
+                    showNotification(`❌ Erreur de connexion: ${err.message}`, 'warning');
+                }
+            } else {
+                showNotification('❌ Supabase non initialisé', 'warning');
+            }
+        }
+        
+        function showCurrentData() {
+            console.log('👁️ DONNÉES ACTUELLES:');
+            console.log('👥 childrenData:', childrenData);
+            console.log('📊 Nombre d\'enfants:', childrenData ? childrenData.length : 'undefined');
+            console.log('🎁 giftStatus:', giftStatus);
+            console.log('🔧 isSupabaseEnabled:', isSupabaseEnabled);
+            
+            if (childrenData && childrenData.length > 0) {
+                childrenData.forEach((child, index) => {
+                    console.log(`👶 Enfant ${index + 1}:`, child);
+                });
+            }
+            
+            showNotification(`📊 ${childrenData ? childrenData.length : 0} enfant(s) en mémoire`, 'info');
+        }
+
+        // Démarrer l'application
+        document.addEventListener('DOMContentLoaded', initApp);
+  </script>
 </body>
 </html>
